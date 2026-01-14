@@ -37,7 +37,37 @@ function initializeTables() {
       available BOOLEAN DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
-  `);
+  `, (err) => {
+    if (err) {
+      console.error('Error creating rooms table:', err);
+      return;
+    }
+
+    // Insert sample rooms after table is created
+    db.get('SELECT COUNT(*) as count FROM rooms', (err, row) => {
+      if (err) {
+        console.error('Error checking rooms:', err);
+        return;
+      }
+
+      if (row && row.count === 0) {
+        const sampleRooms = [
+          { name: 'Salle Conférence A', capacity: 50, description: 'Grande salle avec projecteur et système audio', amenities: 'Projecteur,Audio,WiFi,Climatisation' },
+          { name: 'Salle Réunion B', capacity: 10, description: 'Salle de réunion intime', amenities: 'Tableau blanc,WiFi,Écran TV' },
+          { name: 'Salle Formation C', capacity: 30, description: 'Salle de formation avec tables modulables', amenities: 'Projecteur,WiFi,Tables modulables' },
+          { name: 'Salle Executive D', capacity: 8, description: 'Salle de direction premium', amenities: 'Visioconférence,WiFi,Climatisation,Café' },
+          { name: 'Espace Coworking E', capacity: 20, description: 'Espace de travail partagé', amenities: 'WiFi,Prises électriques,Café' }
+        ];
+
+        const stmt = db.prepare('INSERT INTO rooms (name, capacity, description, amenities) VALUES (?, ?, ?, ?)');
+        sampleRooms.forEach(room => {
+          stmt.run(room.name, room.capacity, room.description, room.amenities);
+        });
+        stmt.finalize();
+        console.log('Sample rooms inserted');
+      }
+    });
+  });
 
   // Bookings table
   db.run(`
@@ -54,26 +84,6 @@ function initializeTables() {
       FOREIGN KEY (room_id) REFERENCES rooms(id)
     )
   `);
-
-  // Insert sample rooms
-  db.get('SELECT COUNT(*) as count FROM rooms', (err, row) => {
-    if (row.count === 0) {
-      const sampleRooms = [
-        { name: 'Salle Conférence A', capacity: 50, description: 'Grande salle avec projecteur et système audio', amenities: 'Projecteur,Audio,WiFi,Climatisation' },
-        { name: 'Salle Réunion B', capacity: 10, description: 'Salle de réunion intime', amenities: 'Tableau blanc,WiFi,Écran TV' },
-        { name: 'Salle Formation C', capacity: 30, description: 'Salle de formation avec tables modulables', amenities: 'Projecteur,WiFi,Tables modulables' },
-        { name: 'Salle Executive D', capacity: 8, description: 'Salle de direction premium', amenities: 'Visioconférence,WiFi,Climatisation,Café' },
-        { name: 'Espace Coworking E', capacity: 20, description: 'Espace de travail partagé', amenities: 'WiFi,Prises électriques,Café' }
-      ];
-
-      const stmt = db.prepare('INSERT INTO rooms (name, capacity, description, amenities) VALUES (?, ?, ?, ?)');
-      sampleRooms.forEach(room => {
-        stmt.run(room.name, room.capacity, room.description, room.amenities);
-      });
-      stmt.finalize();
-      console.log('Sample rooms inserted');
-    }
-  });
 }
 
 module.exports = db;

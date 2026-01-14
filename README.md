@@ -75,7 +75,7 @@ cd backend
 npm install
 
 # Installer les dépendances frontend
-cd ../frontend
+cd frontend
 npm install
 ```
 

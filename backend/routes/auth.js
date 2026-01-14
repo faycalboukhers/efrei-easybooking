@@ -113,6 +113,8 @@ router.post('/login', (req, res) => {
           email: user.email
         }
       });
+    } catch (error) {
+      return res.status(500).json({ error: 'Error during login' });
     }
   });
 });
