@@ -9,7 +9,9 @@
       "Bash(git commit:*)",
       "Bash(npm test:*)",
       "Bash(timeout 5 npm run dev:*)",
-      "Bash(timeout 5 npm start)"
+      "Bash(timeout 5 npm start)",
+      "Bash(timeout 10 npm run dev:*)",
+      "Bash(curl:*)"
     ]
   }
 }

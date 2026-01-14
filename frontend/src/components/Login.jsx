@@ -26,12 +26,24 @@ function Login() {
     setError('');
     setLoading(true);
 
+    // Validation côté client
+    if (!formData.email || !formData.password) {
+      setError('Tous les champs sont requis');
+      setLoading(false);
+      return;
+    }
+
     const result = await login(formData);
 
     if (result.success) {
       navigate('/rooms');
     } else {
-      setError(result.error);
+      // Message d'erreur plus explicite
+      if (result.error.includes('Invalid credentials')) {
+        setError('Email ou mot de passe incorrect. Vérifiez vos identifiants ou créez un compte.');
+      } else {
+        setError(result.error);
+      }
     }
 
     setLoading(false);

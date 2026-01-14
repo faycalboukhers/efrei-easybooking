@@ -1,26 +1,39 @@
 .home-container {
-  min-height: calc(100vh - 100px);
+  min-height: calc(100vh - 70px);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 2rem 1rem;
 }
 
 .hero {
   text-align: center;
   max-width: 1000px;
+  width: 100%;
 }
 
 .hero h1 {
-  font-size: 3rem;
+  font-size: 2.5rem;
   color: #2c3e50;
   margin-bottom: 1rem;
 }
 
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+}
+
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: #7f8c8d;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .subtitle {
+    font-size: 1rem;
+  }
 }
 
 .features {
