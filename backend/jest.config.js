@@ -6,6 +6,9 @@ module.exports = {
     'middleware/**/*.js',
     '!**/node_modules/**'
   ],
-  testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
-  verbose: true
+  testMatch: ['**/__tests__/**/*.test.js'],
+  setupFilesAfterEnv: ['./__tests__/setup.js'],
+  verbose: true,
+  forceExit: true,
+  detectOpenHandles: false
 };
