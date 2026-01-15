@@ -25,8 +25,7 @@ npm test -- security
 ### 5.2 Tests de charge Artillery
 
 cd backend
-npm install -g artillery  # Si pas déjà installé
-artillery run __tests__/performance/load-testing.yml
+npx artillery run __tests__/performance/load-testing.yml
 
 
 backend/__tests__/

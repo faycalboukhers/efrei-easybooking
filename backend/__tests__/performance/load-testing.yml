@@ -1,0 +1,121 @@
+config:
+  target: "http://localhost:5000"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm up phase"
+    - duration: 60
+      arrivalRate: 10
+      name: "Ramp up load"
+    - duration: 30
+      arrivalRate: 15
+      name: "Spike phase"
+
+scenarios:
+  - name: "Complete User Flow"
+    weight: 50
+    flow:
+      - post:
+          url: "/api/auth/signup"
+          json:
+            username: "user_{{ $randomString() }}"
+            email: "test_{{ $randomString() }}@example.com"
+            password: "password123"
+          expect:
+            - statusCode: 201
+          capture:
+            json: "$.token"
+            as: "authToken"
+            strict: false
+      - think: 1
+      - get:
+          url: "/api/rooms"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+          capture:
+            json: "$[0].id"
+            as: "roomId"
+            strict: false
+      - think: 2
+      - post:
+          url: "/api/bookings"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          json:
+            roomId: 1
+            date: "2026-{{ $randomNumber(1,12) }}-{{ $randomNumber(1,28) }}"
+            startTime: "{{ $randomNumber(9,16) }}:00"
+            endTime: "{{ $randomNumber(10,17) }}:00"
+      - think: 1
+      - get:
+          url: "/api/bookings/my-bookings"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+  - name: "Browse Rooms"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/auth/signup"
+          json:
+            username: "browser_{{ $randomString() }}"
+            email: "browse_{{ $randomString() }}@example.com"
+            password: "password123"
+          expect:
+            - statusCode: 201
+          capture:
+            json: "$.token"
+            as: "authToken"
+            strict: false
+      - think: 1
+      - get:
+          url: "/api/rooms"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          expect:
+            - statusCode: 200
+      - think: 1
+      - get:
+          url: "/api/rooms?capacity=20"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+      - think: 1
+      - get:
+          url: "/api/rooms/1"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+  - name: "Authentication Flow"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth/signup"
+          json:
+            username: "auth_{{ $randomString() }}"
+            email: "auth_{{ $randomString() }}@example.com"
+            password: "password123"
+          expect:
+            - statusCode: 201
+          capture:
+            json: "$.user.email"
+            as: "userEmail"
+            strict: false
+      - think: 2
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ userEmail }}"
+            password: "password123"
+          expect:
+            - statusCode: 200
+          capture:
+            json: "$.token"
+            as: "loginToken"
+            strict: false
+      - think: 1
+      - get:
+          url: "/api/bookings/my-bookings"
+          headers:
+            Authorization: "Bearer {{ loginToken }}"
