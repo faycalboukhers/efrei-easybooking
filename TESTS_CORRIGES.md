@@ -48,12 +48,15 @@ routes        |   77.02 |    67.39 |   80.76 |   76.87
    - Problème: Base de données partagée entre tests
    - Problème: Pas de cleanup propre
    - Problème: Tests dupliqués et mal organisés
+   - Problème: Tokens JWT invalides (403 errors)
 
 2. **✅ Après: Tous les tests passent**
    - ✅ Base de données en mémoire isolée
    - ✅ Cleanup automatique après chaque test
    - ✅ Tests consolidés dans un seul fichier
    - ✅ Configuration Jest optimisée
+   - ✅ Délai d'initialisation pour la base de données
+   - ✅ Meilleure gestion des tokens JWT
 
 ### Changements Techniques
 
@@ -181,6 +184,47 @@ cd frontend && npm test && cd ..
 - ✅ FT-08: Show features
 - ✅ FT-09: Have signup button
 - ✅ FT-10: Have login button
+
+---
+
+## 🔄 Pipeline CI/CD GitHub Actions
+
+### Configuration Automatique
+
+Un pipeline CI/CD a été configuré dans `.github/workflows/ci.yml` qui:
+
+✅ **S'exécute automatiquement** à chaque push sur main/master
+✅ **Teste le backend** (40 tests)
+✅ **Teste le frontend** (10 tests)
+✅ **Génère les rapports** de couverture
+✅ **Affiche un résumé** des résultats
+
+### Comment ça fonctionne
+
+1. **Quand vous pushez** votre code sur GitHub:
+   ```bash
+   git add .
+   git commit -m "Your changes"
+   git push
+   ```
+
+2. **GitHub Actions lance automatiquement** les tests
+
+3. **Vous pouvez voir les résultats** dans l'onglet "Actions" de votre repository
+
+4. **Badge de statut**: Ajoutez ce badge dans votre README:
+   ```markdown
+   ![CI Tests](https://github.com/faycalboukhers/efrei-easybooking/actions/workflows/ci.yml/badge.svg)
+   ```
+
+### Structure du Pipeline
+
+```yaml
+Jobs:
+├── backend-tests    → 40 tests + couverture
+├── frontend-tests   → 10 tests + couverture
+└── summary         → Résumé final (50/50 tests)
+```
 
 ---
 

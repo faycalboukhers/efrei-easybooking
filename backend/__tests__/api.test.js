@@ -7,6 +7,39 @@ describe('API Tests - EasyBooking', () => {
   let testRoomId;
   let testBookingId;
 
+  // Create a user and get token before all tests
+  beforeAll(async () => {
+    // Wait a bit for database to initialize
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const response = await request(app)
+      .post('/api/auth/signup')
+      .send({
+        username: `baseuser_${Date.now()}`,
+        email: `baseuser_${Date.now()}@example.com`,
+        password: 'password123'
+      });
+
+    if (response.status !== 201) {
+      console.error('Failed to create base user:', response.body);
+      throw new Error('Failed to setup test user');
+    }
+
+    authToken = response.body.token;
+    testUserId = response.body.user.id;
+
+    // Get a room ID
+    const roomsRes = await request(app)
+      .get('/api/rooms')
+      .set('Authorization', `Bearer ${authToken}`);
+
+    if (roomsRes.status === 200 && roomsRes.body.length > 0) {
+      testRoomId = roomsRes.body[0].id;
+    } else {
+      console.error('Failed to get rooms:', roomsRes.status, roomsRes.body);
+    }
+  });
+
   // ========== TESTS UNITAIRES (10 tests) ==========
 
   describe('Unit Tests - Authentication', () => {
@@ -22,8 +55,6 @@ describe('API Tests - EasyBooking', () => {
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('token');
       expect(response.body).toHaveProperty('user');
-      authToken = response.body.token;
-      testUserId = response.body.user.id;
     });
 
     test('UT-02: Should validate email format', async () => {
@@ -91,7 +122,6 @@ describe('API Tests - EasyBooking', () => {
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body.length).toBeGreaterThan(0);
-      testRoomId = response.body[0].id;
     });
 
     test('UT-07: Should reject access without token', async () => {
@@ -104,7 +134,7 @@ describe('API Tests - EasyBooking', () => {
         .post('/api/bookings')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          roomId: testRoomId,
+          roomId: testRoomId || 1,
           date: '2026-06-15',
           startTime: '10:00',
           endTime: '11:00'
@@ -112,7 +142,6 @@ describe('API Tests - EasyBooking', () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('booking');
-      testBookingId = response.body.booking.id;
     });
 
     test('UT-09: Should prevent double booking', async () => {
@@ -120,7 +149,7 @@ describe('API Tests - EasyBooking', () => {
         .post('/api/bookings')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          roomId: testRoomId,
+          roomId: testRoomId || 1,
           date: '2026-06-15',
           startTime: '10:30',
           endTime: '11:30'

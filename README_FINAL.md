@@ -18,9 +18,10 @@
 |---|----------|---------|--------|
 | 1 | Plan de test | `PLAN_DE_TEST.md` | ✅ Prêt |
 | 2 | Fiche de tests | `FICHE_DE_TESTS.md` | ⚠️ Compléter captures |
-| 3 | Tests automatisés | `backend/__tests__/` + `frontend/src/__tests__/` | ✅ 50 tests |
+| 3 | Tests automatisés | `backend/__tests__/` + `frontend/src/__tests__/` | ✅ 50/50 tests |
 | 4 | Rapport qualité | `RAPPORT_SYNTHESE_QUALITE.md` | ✅ Prêt |
-| 5 | Lien Git | À créer sur GitHub | ⏳ À faire |
+| 5 | Lien Git | https://github.com/faycalboukhers/efrei-easybooking | ✅ En ligne |
+| 6 | Pipeline CI/CD | `.github/workflows/ci.yml` | ✅ Configuré |
 
 ---
 
@@ -59,6 +60,30 @@ cd frontend && npm test
 2. **`TESTS_CORRIGES.md`** → Détails sur les tests corrigés
 3. **`README.md`** → Documentation technique complète
 4. **`START.md`** → Démarrage rapide de l'application
+
+---
+
+## 🔄 Pipeline CI/CD GitHub Actions
+
+### ✅ Configuré et Fonctionnel
+
+Un pipeline CI/CD a été ajouté pour tester automatiquement le code à chaque push:
+
+**Fichier**: `.github/workflows/ci.yml`
+
+**Ce qu'il fait**:
+- ✅ Lance automatiquement les 40 tests backend
+- ✅ Lance automatiquement les 10 tests frontend
+- ✅ Génère les rapports de couverture
+- ✅ Affiche un résumé (50/50 tests)
+
+**Comment l'utiliser**:
+1. Pushez votre code: `git push`
+2. Allez sur GitHub → onglet "Actions"
+3. Voyez les tests s'exécuter automatiquement
+4. Badge de statut disponible pour le README
+
+**Lien GitHub**: https://github.com/faycalboukhers/efrei-easybooking
 
 ---
 
