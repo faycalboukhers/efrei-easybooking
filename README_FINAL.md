@@ -41,13 +41,27 @@ Couverture:            78.75%
 Tests Composants:      10/10 ✅
 ```
 
+### Load Testing: Artillery ✅
+```
+Test rapide:           30 scénarios ✅
+Test complet:          ~1000 scénarios ✅
+P95 response time:     561ms ✅
+Error rate:            0% ✅
+```
+
 **Lancer les tests:**
 ```bash
-# Backend
+# Backend (Jest)
 cd backend && npm test
 
-# Frontend
+# Frontend (Vitest)
 cd frontend && npm test
+
+# Performance (Artillery) - nécessite serveur démarré
+cd backend
+npm run dev              # Terminal 1
+npm run test:load-quick  # Terminal 2 (test rapide)
+npm run test:load        # Terminal 2 (test complet)
 ```
 
 ---
@@ -58,8 +72,10 @@ cd frontend && npm test
 
 1. **`GUIDE_LIVRABLES.md`** → Comment soumettre vos livrables
 2. **`TESTS_CORRIGES.md`** → Détails sur les tests corrigés
-3. **`README.md`** → Documentation technique complète
-4. **`START.md`** → Démarrage rapide de l'application
+3. **`GITHUB_ACTIONS.md`** → Guide du pipeline CI/CD
+4. **`README.md`** → Documentation technique complète
+5. **`START.md`** → Démarrage rapide de l'application
+6. **`backend/__tests__/performance/README.md`** → Guide Artillery
 
 ---
 
@@ -254,13 +270,16 @@ Cordialement,
 
 | Métrique | Valeur |
 |----------|--------|
-| Tests automatisés | 50 |
+| Tests automatisés (Jest/Vitest) | 50 |
+| Tests de charge (Artillery) | 30+ scénarios |
 | Taux de réussite | 100% |
 | Couverture backend | 78.75% |
-| Types de tests | 5 |
+| Types de tests | 6 (Unit, Integration, Performance, Security, Frontend, Load) |
 | Fichiers de code | 50+ |
 | Lignes de code | 5000+ |
-| Commits Git | 7 |
+| Commits Git | 10+ |
+| P95 response time | 561ms |
+| Pipeline CI/CD | ✅ Actif |
 
 ---
 

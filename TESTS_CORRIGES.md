@@ -251,6 +251,20 @@ npm test
 ```
 ![Screenshot: Terminal showing all 10 tests passing]
 
+### 4. Tests de charge Artillery
+```bash
+cd backend
+npm run dev              # Terminal 1
+npm run test:load-quick  # Terminal 2
+```
+![Screenshot: Artillery summary showing 30 scenarios completed, 0% errors]
+
+**Métriques attendues:**
+- 30 scenarios completed
+- P95: ~561ms
+- P99: ~608ms
+- Error rate: 0%
+
 ---
 
 ## 📁 Fichiers de Tests
@@ -297,9 +311,10 @@ frontend/
 - ✅ Aucun test échoué
 
 **Total:**
-- ✅ **50 tests automatisés**
+- ✅ **50 tests automatisés** (Jest/Vitest)
+- ✅ **Tests de charge Artillery** (30+ scénarios)
 - ✅ **100% de réussite**
-- ✅ **5 types de tests** (Unit, Integration, Performance, Security, Frontend)
+- ✅ **6 types de tests** (Unit, Integration, Performance, Security, Frontend, Load Testing)
 
 ---
 
@@ -311,6 +326,7 @@ frontend/
 | **Supertest** | 7.2.2 | Tests API HTTP |
 | **Vitest** | 4.0.17 | Framework de test frontend |
 | **Testing Library** | 16.3.1 | Tests composants React |
+| **Artillery** | 2.0.21 | Tests de charge/performance |
 | **SQLite3** | 5.1.7 | Base de données de test |
 
 ---

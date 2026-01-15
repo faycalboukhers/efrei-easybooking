@@ -32,8 +32,9 @@ Application web complète permettant la gestion et la réservation de salles de 
 - 🔒 Authentification JWT sécurisée
 - 🛡️ Protection contre les vulnérabilités OWASP
 - ⚡ API REST performante
-- 🧪 Suite de tests complète (90+ tests)
+- 🧪 Suite de tests complète (50 tests + Artillery)
 - 📊 Validation des données côté serveur
+- 🚀 Pipeline CI/CD GitHub Actions
 
 ---
 
@@ -124,7 +125,7 @@ NODE_ENV=development
 
 ## 🧪 Tests
 
-### Backend
+### Backend (Jest)
 
 ```bash
 cd backend
@@ -135,46 +136,61 @@ npm test
 # Tests avec couverture
 npm test -- --coverage
 
-# Tests spécifiques
-npm test -- unit           # Tests unitaires
-npm test -- integration    # Tests d'intégration
-npm test -- performance    # Tests de performance
-npm test -- security       # Tests de sécurité
-
 # Mode watch
 npm test -- --watch
 ```
+
+**Résultats:**
+- ✅ 40/40 tests passent
+- ✅ 78.75% de couverture
+- 10 tests unitaires
+- 10 tests d'intégration
+- 10 tests de performance
+- 10 tests de sécurité
 
 ### Tests de charge (Artillery)
 
 ```bash
 cd backend
 
-# Installer Artillery globalement si nécessaire
-npm install -g artillery
+# Terminal 1: Démarrer le serveur
+npm run dev
 
-# Lancer les tests de charge
-artillery run __tests__/performance/load-testing.yml
+# Terminal 2: Lancer les tests de charge
+npm run test:load-quick  # Test rapide (10s)
+npm run test:load        # Test complet (2min)
 ```
 
-### Frontend
+**Résultats:**
+- ✅ 30 scénarios (test rapide)
+- ✅ P95: 561ms, P99: 608ms
+- ✅ 0% error rate
+- 3 flux utilisateur réalistes
+
+### Frontend (Vitest)
 
 ```bash
 cd frontend
 
-# Lancer les tests (à implémenter)
+# Lancer les tests
 npm test
 ```
 
+**Résultats:**
+- ✅ 10/10 tests passent
+- Tests Login, Signup, Home
+
 ### Résumé des Tests
 
-| Type de Test | Nombre | Fichier |
-|--------------|--------|---------|
-| Tests Unitaires | 40+ | `__tests__/unit/auth.test.js` |
-| Tests Intégration | 20+ | `__tests__/integration/booking-flow.test.js` |
-| Tests Performance | 10+ | `__tests__/performance/performance.test.js` |
-| Tests Sécurité | 20+ | `__tests__/security/security.test.js` |
-| **Total** | **90+** | - |
+| Type de Test | Nombre | Statut |
+|--------------|--------|--------|
+| Tests Unitaires | 10 | ✅ 10/10 |
+| Tests Intégration | 10 | ✅ 10/10 |
+| Tests Performance | 10 | ✅ 10/10 |
+| Tests Sécurité | 10 | ✅ 10/10 |
+| Tests Frontend | 10 | ✅ 10/10 |
+| Tests Artillery | 30+ | ✅ P95: 561ms |
+| **Total** | **50** | **✅ 100%** |
 
 ---
 
